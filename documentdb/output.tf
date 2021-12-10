@@ -1,0 +1,1 @@
+# --- documentDB/output.tf ---
