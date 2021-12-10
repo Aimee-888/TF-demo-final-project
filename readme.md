@@ -1,82 +1,72 @@
 # Instructions
 
-## Before you begin
+# Overview - what we build 
+- Exception: WAF code is currently not provided
 
-in root/providers.tf
+![](Final_Project.jpeg)
+
+
+<style>
+r { color: Red }
+</style>
+
+# <r>**Before you begin**</r>
+
+**In root/providers.tf**
 - set profile name to yours
-- test with aws sts-get-caller-identity (in terminal)
-- set region
+- set desired region
 
-create root/terraform.tfvars file 
+**Create root/terraform.tfvars file**
 - (has to be created newly because sensitive data is stored and shouldn't be uploaded to Github)
+
 - add: <br/>
-access_ip = "your_id_adress/32 or 0.0.0.0/0" <br/>
+```
+access_ip = "your_ip_address/32" or "0.0.0.0/0" 
 
-dbname     = "name" <br/>
-dbuser     = "username" <br/>
-dbpassword = "password" <br/>
+dbname     = "name" 
+dbuser     = "username" 
+dbpassword = "password" 
 
-docdb_master_username = "foo" <br/>
-docdb_master_password = "mustbeeightchars" <br/>
+docdb_master_username = "foo" 
+docdb_master_password = "mustbeeightchars" 
+```
+**create SSH keys**<br/>
+- we need 3 keys:
+```
+ ./keys/webserver.pem
+ ./keys/bastionhost.pem
+ ./keys/backendserver.pem
+ ```
+- cretae key dir and add 3 keys: <br/>
+```
+mkdir keys
 
-create SSH Keys<br/>
-- (if you change location (./webserver) also change public_key_path in root/main.tf) <br/>
-- run in terminal: <br/>
-ssh-keygen -t rsa  <br/>
-refactor
--> prompt: ./webserver <br/>
--> prompt: enter <br/>
--> prompt: enter <br/>
+ssh-keygen -t rsa 
+-> prompt: ./keys/***.pem
+-> prompt: enter 
+-> prompt: enter 
+```
 
 
-Route 53: 
-- if you have a domain name, you may change the hostes zone name to yours, but changes will take time 
-- recommended for testing purposes not to use Route 53
+# To do - when implementing application
+- no application running, currently dummy html page only
 
-# Terminal run: (inside root folder!)
+Load balancer:
+- Backend LB is not yet connected to webserver LB (set up/configure Listener)
+
+
+Route 53:
+- if you have a domain name, update the name servers with the once from the hosted zone (type:NS)  <br/>
+
+SSL: 
+- After the SSL-Cert of AWS (ACM) is created (around 30min) you can add it in the console to the Webserver-LB to enable https
+
+
+# Working with TF
 - terraform init 
 - terrafrom validate 
 - terraform plan 
 - terraform apply --auto-approve
+- terraform destroy --auto-approve
 
-### Define Variables 
-
-...to be added
-
-
-
-# Needs to be fixed 
-
-- decide which version to use (for no breaks) (because yellow notifications show up, not set)
-- Don't know why some security groups need an index because they are a tuple (in Hauptmodulen sollte das aber nicht mehr vorkommen)
-- different SSH Keys for Webserver & Backendserver
-- dependencies klären, wenn SG sich ändern mmuss LB/ASG sich auch automatisch ändern und erneueren
-
-## Other informationen 
-
--
--
-
-
-
-
-# Using Git (locally)
-
-(git init)  <br/>
-git add .   <br/>
-git commit -m "Give describing message of changes" <br/>
-
-git branch "new_branch" <br/>
-git checkout "branch" <br/>
-git merge "branch" <br/>
-git push -u origin "branch" <br/>
-
-# Pushing Code to Github
-
-git remote add origin https://github.com/health-cloud-solutions/Terraform2.git <br>
-git push -u origin master   
-
-
-## Downloading Code in Terraform Folder
-git clone https://github.com/health-cloud-solutions/Terraform2.git   
 
